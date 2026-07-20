@@ -3,10 +3,10 @@
 FutureForge is an AI powered Discord career advisor. Powered by CloudFlare AI Worker, it helps users discover careers based on their interests, skills, and goals in details.
 
 ## Reminder :
-FutureForge is AI model agnostic, meaning you are free to choose the AI model that best fits your deployment, performance, and cost requirements so the AI in FutureForge is not responsible for choosing careers. Instead, it performs two important tasks:
+FutureForge is AI model agnostic, which mean that you are free to choose the AI model that best fits your deployment, performance, and cost requirements so the AI in FutureForge is not responsible for choosing careers. Instead, it performs two important tasks below:
 
-1. Understand the user's message (intent analysis).
-2. Generate a natural explanation for the recommended career(s).
+1. Understand user message.
+2. Generate a natural explanation for the recommended careers.
 
 ## Features
 
@@ -79,6 +79,7 @@ FutureForge/
 ## How Do You Choose Your AI Model?
 
 Here Is The List of AI Models You Can Use with it's Advantages :
+
 - Qwen ( Recommended ) General purpose assistant Excellent reasoning, multilingual support, and great instruction following.
 
 - OpenAI OSS Models	Balanced reasoning	Strong open weight models suitable for production deployments.
@@ -88,6 +89,7 @@ Here Is The List of AI Models You Can Use with it's Advantages :
 - Gemma	Lightweight deployments	Efficient especially for low resource environments.
 
 Select a model based on your projects needs:
+
 ⚡ Fast responses -> Smaller models ( 3B–8B parameters )
 
 🧠 Better reasoning -> Larger models ( 8B+ parameters )

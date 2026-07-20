@@ -1,4 +1,8 @@
 import discord
+from logic import CareerLogic
+
+logic = CareerLogic()
+
 
 class StartUI(discord.ui.View):
     def __init__(self):
@@ -14,6 +18,7 @@ class StartUI(discord.ui.View):
         interaction: discord.Interaction,
         button: discord.ui.Button
     ):
+
         await interaction.response.send_message(
             """
 # Let's Find Your Ideal Career!!
@@ -37,8 +42,56 @@ You can mention:
 > I like helping people.
 
 **Type your answer in this channel to begin.**
-
-*(AI analysis is coming soon. For now, this is a placeholder :].)*
 """,
-    ephemeral=True # Only the user who clicked Find My Career sees this message. So if it is in a server other people won't see it.
-        )
+            ephemeral=True
+        ) # Only the user who clicked Find My Career sees this message. So if it is in a server other people won't see it.
+
+        def check(message):
+            return (
+                message.author == interaction.user
+                and message.channel == interaction.channel
+            )
+
+        try:
+            reply = await interaction.client.wait_for(
+                "message",
+                check=check,
+                timeout=300
+            )
+
+            keywords = logic.analyze_user(reply.content)
+
+            careers = logic.search_database(keywords)
+            careers = logic.rank_results(careers)
+            recommendations = logic.create_recommendation(careers)
+
+            if not recommendations:
+                await reply.reply(
+                    "❌ Sorry, I couldn't find any matching careers. Try describing your interests in more detail."
+                )
+                return
+
+            embed = discord.Embed(
+                title="🎯 Your Career Recommendations",
+                description="Here are the careers that best match your interests!",
+                color=discord.Color.green()
+            )
+
+            for career in recommendations:
+                embed.add_field(
+                    name=career["title"],
+                    value=(
+                        f"**Category:** {career['category']}\n"
+                        f"**Salary:** Rp{career['salary_min']:,} - Rp{career['salary_max']:,}\n"
+                        f"**Score:** {career['score']}"
+                    ),
+                    inline=False
+                )
+
+            await reply.reply(embed=embed)
+
+        except TimeoutError:
+            await interaction.followup.send(
+                "⌛ You didn't reply within 5 minutes. Click **Find My Career** again whenever you're ready.",
+                ephemeral=True
+            )
