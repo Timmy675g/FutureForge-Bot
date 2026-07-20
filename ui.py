@@ -40,4 +40,5 @@ You can mention:
 
 *(AI analysis is coming soon. For now, this is a placeholder :].)*
 """,
+    ephemeral=True # Only the user who clicked Find My Career sees this message. So if it is in a server other people won't see it.
         )
