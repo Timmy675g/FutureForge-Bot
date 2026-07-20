@@ -10,7 +10,7 @@ FutureForge is AI model agnostic, meaning you are free to choose the AI model th
 
 ## Features
 
-- AI-powered career recommendations
+- AI powered career recommendations
 - Career database
 - Career comparison
 - Career roadmaps
@@ -43,13 +43,13 @@ User
     ↓
 Discord Bot
     ↓
-Cloudflare AI Worker ( Intent Analysis )
+Cloudflare AI Worker ( To Read Available Data in DB )
     ↓
 Logic
     ↓
 SQLite Database
     ↓
-Cloudflare AI Worker ( Natural Explanation )
+Cloudflare AI Worker ( Gives Response with Custom Texts )
     ↓
 Discord Response
 
@@ -88,10 +88,12 @@ Here Is The List of AI Models You Can Use with it's Advantages :
 - Gemma	Lightweight deployments	Efficient especially for low resource environments.
 
 Select a model based on your projects needs:
-
 ⚡ Fast responses -> Smaller models ( 3B–8B parameters )
+
 🧠 Better reasoning -> Larger models ( 8B+ parameters )
+
 🖥️ Self-hosting -> Llama, Qwen, Gemma, or other open source models
+
 ☁️ Cloud deployment -> Any provider compatible with your infrastructure
 
 # Getting Started!
