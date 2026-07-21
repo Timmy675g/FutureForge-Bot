@@ -1,5 +1,9 @@
 import discord
+
+from ai import AI
 from logic import CareerLogic
+from profile import UserProfile
+
 
 logic = CareerLogic()
 
@@ -7,6 +11,23 @@ logic = CareerLogic()
 class StartUI(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
+
+    async def ask_question(self, interaction: discord.Interaction, question: str):
+        await interaction.followup.send(question, ephemeral=True)
+
+        def check(message):
+            return (
+                message.author == interaction.user
+                and message.channel == interaction.channel
+            )
+
+        reply = await interaction.client.wait_for(
+            "message",
+            check=check,
+            timeout=300
+        )
+
+        return reply.content, reply
 
     @discord.ui.button(
         label="Find My Career",
@@ -19,47 +40,52 @@ class StartUI(discord.ui.View):
         button: discord.ui.Button
     ):
 
+        profile = UserProfile()
+
         await interaction.response.send_message(
             """
-# Let's Find Your Ideal Career!!
+# 👋 Welcome to FutureForge!
 
-I'm going to ask you a few questions to understand your interests and recommend careers that suit you.
+I'm your AI powered career advisor.
 
-### Tell me about yourself?
+Before recommending careers, I'd like to know a little about you.
 
-You can mention:
-• Your hobbies
-• Subjects you enjoy
-• Skills you already have
-• Things you like doing
+It'll only take around **2 - 3 minutes**.
 
-### For Example :
-
-> I enjoy coding and solving problems.
-
-> I love drawing and designing.
-
-> I like helping people.
-
-**Type your answer in this channel to begin.**
+Let's begin!
 """,
             ephemeral=True
-        ) # Only the user who clicked Find My Career sees this message. So if it is in a server other people won't see it.
-
-        def check(message):
-            return (
-                message.author == interaction.user
-                and message.channel == interaction.channel
-            )
+        )
 
         try:
-            reply = await interaction.client.wait_for(
-                "message",
-                check=check,
-                timeout=300
+            # Question 1
+            profile.name, _ = await self.ask_question(
+                interaction,
+                "Hi! **What should I call you?**"
             )
 
-            keywords = logic.analyze_user(reply.content)
+            # Question 2
+            profile.subjects, _ = await self.ask_question(
+                interaction,
+                f"Nice to meet you, **{profile.name}**! 😊\n\n"
+                "📚 **Which school subjects do you enjoy the most?**\n\n"
+                "Example:\n"
+                "> Computer Science, Math, English"
+            )
+
+            # Question 3
+            profile.hobbies, reply = await self.ask_question(
+                interaction,
+                "🎮 **What kind of hobbies do you enjoy outside school?**\n\n"
+                "Example:\n"
+                "> Coding, Gaming, Reading"
+            )
+
+            # AI will try to Analyse the profile and extract the keywords from the user.
+
+            keywords = AI.analyze_profile(profile)
+
+            print("AI Keywords:", keywords)
 
             careers = logic.search_database(keywords)
             careers = logic.rank_results(careers)
@@ -67,14 +93,23 @@ You can mention:
 
             if not recommendations:
                 await reply.reply(
-                    "❌ Sorry, I couldn't find any matching careers. Try describing your interests in more detail."
+                    "❌ Sorry, I couldn't find any matching careers."
                 )
                 return
 
-            embed = discord.Embed(
+            embed = discord.Embed( # It seemed nice to have embed for the final career recommendation
                 title="🎯 Your Career Recommendations",
-                description="Here are the careers that best match your interests!",
+                description=(
+                    f"Based on what you've shared, **{profile.name}**, "
+                    "here are the careers that best match your profile!"
+                ),
                 color=discord.Color.green()
+            )
+
+            embed.add_field(
+                name="AI Keywords",
+                value=", ".join(keywords),
+                inline=False
             )
 
             for career in recommendations:
@@ -92,6 +127,7 @@ You can mention:
 
         except TimeoutError:
             await interaction.followup.send(
-                "⌛ You didn't reply within 5 minutes. Click **Find My Career** again whenever you're ready.",
+                "⌛ You didn't reply within 5 minutes.\n\n"
+                "Click **Find My Career** again whenever you're ready.",
                 ephemeral=True
             )

@@ -1,4 +1,5 @@
 import sqlite3
+from ai import AI
 
 DATABASE = "futureforge.db"
 
@@ -6,29 +7,15 @@ DATABASE = "futureforge.db"
 def get_connection():
     return sqlite3.connect(DATABASE)
 
-
 class CareerLogic:
 
-    def analyze_user(self, message): # Extract keywords from the user message. For Example: 'I like coding and AI' so the keywords will be ['coding', 'ai']
-        message = message.lower()
-
-        STOP_WORDS = {
-            "i", "me", "my",
-            "like", "love", "enjoy",
-            "and", "or", "the", "a", "an",
-            "to", "of", "is", "am"
-        }
-
-        keywords = [
-            word
-            for word in message.replace(",", "").split()
-            if word not in STOP_WORDS
-        ]
-
-        return keywords
+    def extract_keywords(self, message): # Extract keywords from the user message. For Example: 'I like coding and AI' so the keywords will be ['coding', 'ai']
+         return AI.extract_keywords(message)
 
 
     def search_database(self, keywords):
+        
+        keywords = [k.lower().strip() for k in keywords]
 
         conn = get_connection()
         cursor = conn.cursor()

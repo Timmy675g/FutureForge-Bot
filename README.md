@@ -131,6 +131,7 @@ Open `config.py` and set:
 ```python
 TOKEN = "YOUR_DISCORD_BOT_TOKEN"
 DATABASE = "futureforge.db"
+WORKER_URL = "YOUR_WORKER_URL_HERE"
 ```
 
 ### 4. Run the bot
