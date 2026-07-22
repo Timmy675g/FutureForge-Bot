@@ -4,9 +4,68 @@ from ai import AI
 from logic import CareerLogic
 from profile import UserProfile
 
+class EducationView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=300)
+        self.value = None
+
+    @discord.ui.button(
+        label="SMP",
+        style=discord.ButtonStyle.secondary
+    )
+    async def smp(
+        self,
+        interaction: discord.Interaction,
+        button: discord.ui.Button
+    ):
+        self.value = "Junior High School"
+
+        await interaction.response.defer()
+        self.stop()
+
+    @discord.ui.button(
+        label="SMA / SMK",
+        style=discord.ButtonStyle.primary
+    )
+    async def sma(
+        self,
+        interaction: discord.Interaction,
+        button: discord.ui.Button
+    ):
+        self.value = "Senior High School"
+
+        await interaction.response.defer()
+        self.stop()
+
+    @discord.ui.button(
+        label="University",
+        style=discord.ButtonStyle.success
+    )
+    async def university(
+        self,
+        interaction: discord.Interaction,
+        button: discord.ui.Button
+    ):
+        self.value = "University"
+
+        await interaction.response.defer()
+        self.stop()
+
+    @discord.ui.button(
+        label="Other",
+        style=discord.ButtonStyle.danger
+    )
+    async def other(
+        self,
+        interaction: discord.Interaction,
+        button: discord.ui.Button
+    ):
+        self.value = "Other"
+
+        await interaction.response.defer()
+        self.stop()
 
 logic = CareerLogic()
-
 
 class StartUI(discord.ui.View):
     def __init__(self):
@@ -80,6 +139,31 @@ Let's begin!
                 "Example:\n"
                 "> Coding, Gaming, Reading"
             )
+            
+            # Question 4
+            profile.skills, _ = await self.ask_question(
+                interaction,
+                "💻 **What skills do you already have?**\n\n"
+                "Examples:\n"
+                "> Python, Video Editing, Leadership, Public Speaking"
+            )
+
+            # Question 5
+            profile.personality, _ = await self.ask_question(
+                interaction,
+                "🧠 **Which words describe you best?**\n\n"
+                "Examples:\n"
+                "> Analytical, Creative, Curious, Patient"
+            )
+
+            # Question 6
+            profile.goal, reply = await self.ask_question(
+                interaction,
+                "🎯 **Finally...**\n\n"
+                "What kind of career would you like in the future?\n\n"
+                "Example:\n"
+                "> I want to become a Software Engineer."
+            )
 
             # AI will try to Analyse the profile and extract the keywords from the user.
 
@@ -89,6 +173,21 @@ Let's begin!
 
             careers = logic.search_database(keywords)
             careers = logic.rank_results(careers)
+            
+            if not careers:
+                await interaction.followup.send(
+                    f"""⚠️ **I couldn't confidently recommend a career.**
+
+            **I identified these interests:**
+            {chr(10).join(f"• {k}" for k in keywords)}
+
+            Unfortunately, FutureForge doesn't currently contain enough data for careers matching those interests.
+
+            Please try describing your interests differently or check back when we've added more careers.""",
+                    ephemeral=True
+                )
+                return
+            
             recommendations = logic.create_recommendation(careers)
 
             if not recommendations:

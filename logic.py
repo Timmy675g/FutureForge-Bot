@@ -3,7 +3,6 @@ from ai import AI
 
 DATABASE = "futureforge.db"
 
-
 def get_connection():
     return sqlite3.connect(DATABASE)
 
@@ -58,17 +57,34 @@ class CareerLogic:
                 (career_id,)
             )
             interests = [row[0].lower() for row in cursor.fetchall()]
+            title = career[1].lower()
+            description = (career[3] or "").lower()
 
             score = 0
+            matches = []
+            description_words = description.split()
 
             for keyword in keywords:
+                if keyword == title:
+                    score += 40
+                    matches.append(keyword)
+
+                elif keyword in title:
+                    score += 30
+                    matches.append(keyword)
 
                 if keyword in skills:
                     score += 20
+                    matches.append(keyword)
 
                 if keyword in interests:
                     score += 10
+                    matches.append(keyword)
 
+                if keyword in description_words:
+                    score += 5
+                    matches.append(keyword)
+                
             if score > 0:
                 careers.append({
                     "id": career_id,
@@ -77,7 +93,8 @@ class CareerLogic:
                     "description": career[3],
                     "salary_min": career[4],
                     "salary_max": career[5],
-                    "score": score
+                    "score": score,
+                    "matches": list(set(matches))
                 })
 
         conn.close()
@@ -87,12 +104,24 @@ class CareerLogic:
     def rank_results(self, careers): # It will Sort careers from highest score so like Software Engineer with 30% will be on top and if a Data Scientist has 20% it will be below it.
 
         careers.sort(
-            key=lambda career: career["score"],
-            reverse=True
-        )
+        key=lambda career: career["score"],
+        reverse=True
+    )
+
+        if not careers:
+            return []
+
+        if careers[0]["score"] < 40:
+            return []
+
+        highest = careers[0]["score"]
+
+        for career in careers:
+            career["match"] = round(
+                career["score"] / highest * 100
+            )
 
         return careers
-
 
     def create_recommendation(self, careers): # Return the top three recommendations.
 

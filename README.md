@@ -71,7 +71,7 @@ FutureForge/
 - [x] !start command
 - [x] !help command
 - [x] Find My Career button
-- [ ] AI integration
+- [x] AI integration
 - [ ] Recommendation engine
 - [ ] Career comparison
 - [ ] Admin panel

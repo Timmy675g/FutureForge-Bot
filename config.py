@@ -1,2 +1,2 @@
-TOKEN = "YOUR_BOT_TOKEN_HERE"
+TOKEN = "BOT_TOKEN_HERE"
 DATABASE = "futureforge.db"
