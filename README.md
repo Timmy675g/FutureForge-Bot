@@ -28,30 +28,17 @@ FutureForge is AI model agnostic, which mean that you are free to choose the AI 
 
 `!start` Displays the welcome message and starts FutureForge. ✅ 
 `!help` Displays the help menu. ✅ 
+`!browse` Browse all available careers in the database. ✅
+`!career <name>` View detailed information about a career. ✅
+`!roadmap` View the learning roadmap for a career. ✅
+`!about` Learn more about FutureForge. ✅
 
 ## Planned Commands
-`!recommend`Get career recommendations based on your interests. 
-`!browse` Browse all available careers in the database. 
-`!career <name>` View detailed information about a career. 
-`!compare` Compare two careers side by side. 
-`!roadmap` View the learning roadmap for a career. 
-`!about` Learn more about FutureForge. 
+`!recommend`Get career recommendations based on your interests. [ Optional For Now ] 
+`!compare` Compare two careers side by side. [ Planning ]
 
 ## Architecture
-
-User
-    ↓
-Discord Bot
-    ↓
-Cloudflare AI Worker ( To Read Available Data in DB )
-    ↓
-Logic
-    ↓
-SQLite Database
-    ↓
-Cloudflare AI Worker ( Gives Response with Custom Texts )
-    ↓
-Discord Response
+User -> Discord Bot -> Cloudflare AI Worker ( To Read Available Data in DB ) -> Logic -> SQLite Database -> Cloudflare AI Worker ( Gives Response with Custom Texts ) -> Discord Response
 
 ## Project Structure
 
@@ -72,9 +59,9 @@ FutureForge/
 - [x] !help command
 - [x] Find My Career button
 - [x] AI integration
-- [ ] Recommendation engine
-- [ ] Career comparison
-- [ ] Admin panel
+- [ ] Recommendation engine [ Optional ]
+- [ ] Career comparison [ Planning ]
+- [ ] Admin panel [ Planning ]
 
 ## How Do You Choose Your AI Model?
 
