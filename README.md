@@ -26,16 +26,16 @@ FutureForge is AI model agnostic, which mean that you are free to choose the AI 
 
 ## Available Commands
 
-`!start` Displays the welcome message and starts FutureForge. ✅ 
-`!help` Displays the help menu. ✅ 
-`!browse` Browse all available careers in the database. ✅
-`!career <name>` View detailed information about a career. ✅
-`!roadmap` View the learning roadmap for a career. ✅
-`!about` Learn more about FutureForge. ✅
+- `!start` Displays the welcome message and starts FutureForge. ✅ 
+- `!help` Displays the help menu. ✅ 
+- `!browse` Browse all available careers in the database. ✅
+- `!career <name>` View detailed information about a career. ✅
+- `!roadmap` View the learning roadmap for a career. ✅
+- `!about` Learn more about FutureForge. ✅
 
 ## Planned Commands
-`!recommend`Get career recommendations based on your interests. [ Optional For Now ] 
-`!compare` Compare two careers side by side. [ Planning ]
+- `!recommend`Get career recommendations based on your interests. [ Optional For Now ] 
+- `!compare` Compare two careers side by side. [ Planning ]
 
 ## Architecture
 User -> Discord Bot -> Cloudflare AI Worker ( To Read Available Data in DB ) -> Logic -> SQLite Database -> Cloudflare AI Worker ( Gives Response with Custom Texts ) -> Discord Response
