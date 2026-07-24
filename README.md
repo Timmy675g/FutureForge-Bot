@@ -59,9 +59,9 @@ FutureForge/
 - [x] !help command
 - [x] Find My Career button
 - [x] AI integration
-- [ ] Recommendation engine [ Optional ]
+- [x] Recommendation engine
 - [ ] Career comparison [ Planning ]
-- [ ] Admin panel [ Planning ]
+- [ ] Admin panel [ Cancelled due to minimal use ]
 
 ## How Do You Choose Your AI Model?
 
